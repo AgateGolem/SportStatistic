@@ -1,0 +1,143 @@
+.header {
+    height: 420px;
+    background: linear-gradient( rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5) ), url('../img/background_header2.png');
+
+    &__text {
+        height: 100%;
+        width: 20%;
+        margin: auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-size: 72px;
+        color: white;
+    }
+}
+
+.inf{
+    width: 70%;
+    margin: 3% auto;
+
+    &__title{
+        font-size: 60px;
+    }
+
+    &__league{
+        display: flex;
+        align-items: center;
+        margin-top: 15px;
+        width: 20%;
+        height: 70px;
+        border-spacing: 1px;
+        font-size: 30px;
+        border: 1px solid rgb(199, 199, 199);
+        border-radius: 2px;
+        padding-left: 20px;
+
+        &__icons{
+            display: flex;
+            padding-left: 30%;
+
+            &__calendar{
+                padding: 0 10px;
+                transition: 3s;
+            }
+
+            &__calendar svg:hover {
+                stroke: rgb(76, 156, 76);
+            }
+
+            &__teams svg:hover {
+                stroke: rgb(76, 156, 76);
+            }
+        }
+    }  
+    
+    &__season{
+        display: flex;
+        margin: 30px 0;
+
+        &__seasonText{
+            font-size: 40px;
+        }
+
+        &__select{
+            margin: 0 30px;
+            display: flex;
+            align-items: center;
+            width: 200px;
+            position: relative;
+
+            &__selector{
+                width: 100%;
+                height: 100%;
+                padding: .6em 1.4em .5em .8em;
+                border: rgb(199, 199, 199) solid 1px;
+                appearance: none;
+            }
+
+            &__selector:hover{
+                border-color: rgb(76, 156, 76);
+            }
+        }
+        &__select::after{
+            content: "";
+            display: block;
+            border-style: solid;
+            border-width: 6px 5px 0 5px;
+            border-color: rgb(199, 199, 199) transparent transparent transparent;
+            pointer-events: none;
+            position: absolute;
+            top: 50%;
+            right: 1rem;
+            z-index: 1;
+            margin-top: -3px;
+        }
+    }
+
+    &__content{
+        width: 100%;
+        
+        &__table{
+            width: 100%;
+            border-spacing: 1px 15px;
+        }
+
+        &__table tr{
+            margin:30px 0;
+            background-color: rgb(199, 199, 199);
+            text-align: center;
+        }
+
+        &__table td{
+            height: 20%;
+        }
+
+        
+    }
+
+    .teams{
+        &__container{
+            display: flex;
+            justify-content: space-around;
+        }
+    }
+
+    &__teams td:nth-child(1) {
+        text-align: left;
+        padding: 10px;
+        width: 80%;
+    }
+    &__teams td:nth-child(2) {
+        width: 10%;
+        height: 100%;
+    }
+    &__teams td:nth-child(3) {
+        width: 10%;
+    }
+
+
+}
+
+
