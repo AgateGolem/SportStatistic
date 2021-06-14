@@ -3,6 +3,7 @@ import "../styles/nullstyle.css";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
+
 export default class Leagues extends Component {
     render() {
         return (
