@@ -9,7 +9,8 @@ export default class Comands extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { teams: [], seasons: [], value: "", name: "" }
+        this.state = { teams: [], seasons: [], name: "" }
+        this.value = "2020";
 
         this.handleChange = this.handleChange.bind(this);
     }
@@ -20,8 +21,8 @@ export default class Comands extends Component {
                 "X-Auth-Token": '1a8cc8943cb9441d861c456e2be88ac9'
             }
         }
-        this.setState({ value: event.target.value });
-        axios.get(`https://api.football-data.org/v2/competitions/` + this.props.match.params.id + '/teams?season=' + this.state.value.substring(0, 4), data)
+        this.value = event.target.value;
+        axios.get(`https://api.football-data.org/v2/competitions/` + this.props.match.params.id + '/teams?season=' + this.value.substring(0, 4), data)
             .then(response => {
                 console.log(response);
                 this.setState({ teams: response.data.teams });
@@ -60,9 +61,12 @@ export default class Comands extends Component {
 
     comandsList(){
         return this.state.teams.map(function(team, i){
-            return <tr>
-                <td>{team.name}
-                    <div class="transition">
+            return <li>
+                <div class="inf__block">
+                    <div class="inf__name">
+                        {team.name}
+                    </div>
+                    <div class="inf__icons">
                         <Link to={"/calendarcomand/" + team.id}><svg width="25" height="25" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M68.2188 13.875H55.5V5.78125H50.875V13.875H23.125V5.78125H18.5V13.875H5.78125C4.86161 13.8761 3.97994 14.2419 3.32966 14.8922C2.67937 15.5424 2.31357 16.4241 2.3125 17.3438V65.9062C2.31357 66.8259 2.67937 67.7076 3.32966 68.3578C3.97994 69.0081 4.86161 69.3739 5.78125 69.375H68.2188C69.1384 69.3739 70.0201 69.0081 70.6703 68.3578C71.3206 67.7076 71.6864 66.8259 71.6875 65.9062V17.3438C71.6864 16.4241 71.3206 15.5424 70.6703 14.8922C70.0201 14.2419 69.1384 13.8761 68.2188 13.875ZM67.0625 64.75H6.9375V18.5H18.5V24.2812H23.125V18.5H50.875V24.2812H55.5V18.5H67.0625V64.75Z" fill="black" />
                             <path d="M16.1875 32.375H20.8125V37H16.1875V32.375Z" fill="black" />
@@ -79,9 +83,8 @@ export default class Comands extends Component {
                             <path d="M53.1875 53.1875H57.8125V57.8125H53.1875V53.1875Z" fill="black" />
                         </svg></Link>
                     </div>
-                </td>
-                
-            </tr>
+                </div>
+            </li>
         });
     }
 
@@ -98,31 +101,25 @@ export default class Comands extends Component {
             <div>
                 <header class="header">
                     <div class="header__text">
-                        SOCCER STAT
+                        SOCCER <br /> STAT
                     </div>
                 </header>
                 <div class="inf">
                     <div class="inf__title">
-                        {this.state.name}
+                        Teams of {this.state.name}
                     </div>
                     <div class="inf__season">
-                        <div class="inf__season__seasonText">Сезон</div>
-                        <div class="inf__season__select">
-                            <select onChange={this.handleChange} class="inf__season__select__selector">
+                        <div class="inf__text">Season</div>
+                        <div class="inf__select">
+                            <select onChange={this.handleChange} class="inf__selector">
                                 {this.seasonsList()}
                             </select>
-                            
                         </div>
                     </div>
-                    <div class="inf__content">
-                        <table class="inf__content__table teams">
-                        <thead>
-                            <tr><th>Команды</th></tr>
-                        </thead>
-                            <tbody>
+                    <div class="inf__list">
+                        <ul class="inf__blocks">
                                 {this.comandsList()}
-                            </tbody>
-                        </table>
+                        </ul>
                     </div>
                 </div>
             </div>

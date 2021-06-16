@@ -1,32 +1,48 @@
 import "../styles/styles.scss";
 import "../styles/nullstyle.css";
-import React, { Component,} from "react";
-import axios from 'axios';
+import React, { Component } from "react";
+import axios from 'axios'; 
+import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 
 export default class CalendarComand extends Component{
     constructor(props) {
         super(props);
-        this.state = { matches: [], name: "", valueFirst:'', valueLast:'' }
+        this.state = { matches: [], name: "", value: [new Date(), new Date()] }
 
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleChange1 = this.handleChange1.bind(this);
-        this.handleChange2 = this.handleChange2.bind(this);
+        this.handleOnChange = this.handleOnChange.bind(this);
     }
 
-    handleChange1(event){
-        this.setState({valueFirst: event.target.value});
-    }
-    handleChange2(event) {
-        this.setState({ valueLast: event.target.value });
-    }
-
-    handleSubmit(event) {
+    handleOnChange(value){
+        console.log(value);
         let data = {
             headers: {
                 "X-Auth-Token": '1a8cc8943cb9441d861c456e2be88ac9'
             }
         }
-        axios.get(`https://api.football-data.org/v2/teams/` + this.props.match.params.id + '/matches?dateFrom=' + this.state.valueFirst, data)
+        var year = value[0].getFullYear();
+        var month = value[0].getMonth() + 1;
+        if (month >= 0 && month <= 9) {
+            month = '0' + month;
+        }
+        var day = value[0].getDate();
+        if (day >= 0 && day <= 9) {
+            day = '0' + day;
+        }
+        var dateFirst = year + "-" + month + "-" + day;
+
+        var year = value[1].getFullYear();
+        var month = value[1].getMonth() + 1;
+        if (month >= 0 && month <= 9) {
+            month = '0' + month;
+        }
+        var day = value[1].getDate();
+        if (day >= 0 && day <= 9) {
+            day = '0' + day;
+        }
+        var dateLast = year + "-" + month + "-" + day;
+        
+        this.setState({value: value})
+        axios.get(`https://api.football-data.org/v2/teams/` + this.props.match.params.id + '/matches?dateFrom=' + dateFirst + '&dateTo=' + dateLast, data)
             .then(response => {
                 console.log(response);
                 this.setState({ matches: response.data.matches });
@@ -35,6 +51,7 @@ export default class CalendarComand extends Component{
                 console.log(error);
             })
     }
+
 
     componentDidMount() {
 
@@ -79,18 +96,20 @@ export default class CalendarComand extends Component{
             <div>
                 <header class="header">
                     <div class="header__text">
-                        SOCCER STAT
+                        SOCCER <br /> STAT
                     </div>
                 </header>
                 <div class="inf">
                     <div class="inf__title">
                         {this.state.name}
                     </div>
-                    <form onSubmit={this.handleSubmit}>
-                        <input type="date" onChange={this.handleChange1}/>
-                        <input type="date" onChange={this.handleChange2}/>
-                        <input type="submit" value="Ввести дату"></input>
-                    </form>
+                    <div class="DateRangePicker">
+                        <DateRangePicker 
+                            onChange={(value) => this.handleOnChange(value)}
+                            value={this.state.value}
+                            format="yyyy-MM-dd"
+                        />
+                    </div>
                     <div class="inf__content">
                         <table class="inf__content__table matches">
                             <tbody>

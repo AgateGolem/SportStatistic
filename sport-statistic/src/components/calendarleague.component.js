@@ -2,25 +2,49 @@ import "../styles/styles.scss";
 import "../styles/nullstyle.css";
 import React, { Component } from "react";
 import axios from 'axios';
+import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 
 
 export default class CalendarLeague extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { matches: [], seasons: [], value: "", name: "" }
+        this.state = { matches: [], name: "", value: [new Date(), new Date()] }
 
-        this.handleChange = this.handleChange.bind(this);
+        this.handleOnChange = this.handleOnChange.bind(this);
     }
 
-    handleChange(event) {
+    handleOnChange(value) {
+        console.log(value);
         let data = {
             headers: {
                 "X-Auth-Token": '1a8cc8943cb9441d861c456e2be88ac9'
             }
         }
-        this.setState({ value: event.target.value });
-        axios.get(`https://api.football-data.org/v2/competitions/` + this.props.match.params.id + '/matches?season=' + this.state.value.substring(0, 4), data)
+        var year = value[0].getFullYear();
+        var month = value[0].getMonth() + 1;
+        if (month >= 0 && month <= 9) {
+            month = '0' + month;
+        }
+        var day = value[0].getDate();
+        if (day >= 0 && day <= 9) {
+            day = '0' + day;
+        }
+        var dateFirst = year + "-" + month + "-" + day;
+
+        var year = value[1].getFullYear();
+        var month = value[1].getMonth() + 1;
+        if (month >= 0 && month <= 9) {
+            month = '0' + month;
+        }
+        var day = value[1].getDate();
+        if (day >= 0 && day <= 9) {
+            day = '0' + day;
+        }
+        var dateLast = year + "-" + month + "-" + day;
+
+        this.setState({ value: [dateFirst, dateLast] })
+        axios.get(`https://api.football-data.org/v2/competitions/` + this.props.match.params.id + '/matches?dateFrom=' + dateFirst + '&dateTo=' + dateLast, data)
             .then(response => {
                 console.log(response);
                 this.setState({ matches: response.data.matches });
@@ -38,7 +62,7 @@ export default class CalendarLeague extends Component {
             }
         }
 
-        axios.get(`https://api.football-data.org/v2/competitions/` + this.props.match.params.id + '/matches', data)
+        axios.get(`https://api.football-data.org/v2/competitions/` + this.props.match.params.id + '/matches?season=2020', data)
             .then(response => {
                 console.log(response);
                 this.setState({ matches: response.data.matches });
@@ -50,7 +74,7 @@ export default class CalendarLeague extends Component {
         axios.get(`https://api.football-data.org/v2/competitions/` + this.props.match.params.id, data)
             .then(response => {
                 console.log(response);
-                this.setState({ seasons: response.data.seasons, name: response.data.name });
+                this.setState({ name: response.data.name });
             })
             .catch((error) => {
                 console.log(error);
@@ -82,7 +106,7 @@ export default class CalendarLeague extends Component {
             <div>
                 <header class="header">
                     <div class="header__text">
-                        SOCCER STAT
+                        SOCCER <br /> STAT
                     </div>
                 </header>
                 <div class="inf">
@@ -90,11 +114,12 @@ export default class CalendarLeague extends Component {
                         {this.state.name}
                     </div>
                     <div class="inf__season">
-                        <div class="inf__season__seasonText">Сезон</div>
-                        <div class="inf__season__select">
-                            <select onChange={this.handleChange} class="inf__season__select__selector">
-                                {this.seasonsList()}
-                            </select>
+                        <div class="DateRangePicker">
+                            <DateRangePicker
+                                onChange={(value) => this.handleOnChange(value)}
+                                value={this.state.value}
+                                format="yyyy-MM-dd"
+                            />
                         </div>
                     </div>
                     <div class="inf__content">
