@@ -3,6 +3,7 @@ import "../styles/nullstyle.css";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import SearchBar from 'search-bar-react'
 
 export default class Leagues extends Component {
 
@@ -11,14 +12,16 @@ export default class Leagues extends Component {
         this.state = { competitions:[]}
         this.valueSearch = "";
         this.beginArray = [];
+        this.API_KEY = process.env.REACT_APP_API_KEY
         this.setValue = this.setValue.bind(this);
+        this.setClear = this.setClear.bind(this);
     }
 
     componentDidMount() {
         //
         let data = {
             headers: {
-                "X-Auth-Token": '1a8cc8943cb9441d861c456e2be88ac9'
+                "X-Auth-Token": this.API_KEY
             }
         }
 
@@ -75,13 +78,15 @@ export default class Leagues extends Component {
     }
 
     setValue(value){
-        console.log(value);
         this.valueSearch = value;
         const competitionsList = this.state.competitions;
         var filteredCompetitions = competitionsList.filter(competition => {
             return competition.name.toLowerCase().includes(this.valueSearch.toLowerCase());
         })
         this.setState({ competitions: filteredCompetitions });
+    }
+    setClear(){
+        this.setState({competitions: this.beginArray})
     }
 
     render() {
@@ -97,14 +102,10 @@ export default class Leagues extends Component {
                         Leagues list
                     </div>
                     <div class="inf__form">
-                        <form className="inf__form__search">
-                            <input
-                                type="text"
-                                placeholder="Type your search request"
-                                className="inf__form__search__input"
-                                onChange={(event) => this.setValue(event.target.value)}
-                            />
-                        </form>
+                        <SearchBar
+                            onChange={(text) => this.setValue(text)}
+                            onClear = {() => this.setClear()}
+                        />
                     </div>
                     <div class="inf__list">
                         <ul class="inf__blocks">

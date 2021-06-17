@@ -8,6 +8,7 @@ export default class CalendarComand extends Component{
     constructor(props) {
         super(props);
         this.state = { matches: [], name: "", value: [new Date(), new Date()] }
+        this.API_KEY = process.env.REACT_APP_API_KEY
 
         this.handleOnChange = this.handleOnChange.bind(this);
     }
@@ -16,7 +17,7 @@ export default class CalendarComand extends Component{
         console.log(value);
         let data = {
             headers: {
-                "X-Auth-Token": '1a8cc8943cb9441d861c456e2be88ac9'
+                "X-Auth-Token": this.API_KEY
             }
         }
         var year = value[0].getFullYear();
@@ -57,7 +58,7 @@ export default class CalendarComand extends Component{
 
         let data = {
             headers: {
-                "X-Auth-Token": '1a8cc8943cb9441d861c456e2be88ac9'
+                "X-Auth-Token": this.API_KEY
             }
         }
 

@@ -3,6 +3,7 @@ import "../styles/nullstyle.css";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import axios from 'axios';
+import SearchBar from 'search-bar-react'
 
 
 export default class Comands extends Component {
@@ -11,21 +12,26 @@ export default class Comands extends Component {
         super(props);
         this.state = { teams: [], seasons: [], name: "" }
         this.value = "2020";
+        this.beginArray = [];
+        this.API_KEY = process.env.REACT_APP_API_KEY
 
         this.handleChange = this.handleChange.bind(this);
+        this.setValue = this.setValue.bind(this);
+        this.setClear = this.setClear.bind(this);
     }
 
     handleChange(event){
         let data = {
             headers: {
-                "X-Auth-Token": '1a8cc8943cb9441d861c456e2be88ac9'
+                "X-Auth-Token": this.API_KEY
             }
         }
         this.value = event.target.value;
         axios.get(`https://api.football-data.org/v2/competitions/` + this.props.match.params.id + '/teams?season=' + this.value.substring(0, 4), data)
             .then(response => {
                 console.log(response);
-                this.setState({ teams: response.data.teams });
+                this.setState({ teams: response.data.teams });  
+                this.beginArray = response.data.teams;
             })
             .catch((error) => {
                 console.log(error);
@@ -36,7 +42,7 @@ export default class Comands extends Component {
         //
         let data = {
             headers: {
-                "X-Auth-Token": '1a8cc8943cb9441d861c456e2be88ac9'
+                "X-Auth-Token": this.API_KEY
             }
         }
 
@@ -44,6 +50,7 @@ export default class Comands extends Component {
             .then(response => {
                 console.log(response);
                 this.setState({ teams: response.data.teams });
+                this.beginArray = response.data.teams;
             })
             .catch((error) => {
                 console.log(error);
@@ -96,6 +103,20 @@ export default class Comands extends Component {
         })
     }
 
+    setValue(valueInp) {
+        console.log(valueInp);
+        this.valueSearch = valueInp;
+        const teamsList = this.state.teams;
+        var filteredTeams = teamsList.filter(team => {
+            return team.name.toLowerCase().includes(this.valueSearch.toLowerCase());
+        })
+        this.setState({ teams: filteredTeams });
+    }
+
+    setClear() {
+        this.setState({ teams: this.beginArray })
+    }
+
     render() {
         return (
             <div>
@@ -115,6 +136,12 @@ export default class Comands extends Component {
                                 {this.seasonsList()}
                             </select>
                         </div>
+                    </div>
+                    <div class="inf__form">
+                        <SearchBar
+                            onChange={(text) => this.setValue(text)}
+                            onClear={() => this.setClear()}
+                        />
                     </div>
                     <div class="inf__list">
                         <ul class="inf__blocks">

@@ -29,6 +29,13 @@
         margin-bottom: 1%;
     }
 
+    &__text{
+        display: flex;
+        width: 20%;
+        margin: auto 0;
+        font-size: 20px;
+    }
+
     &__block{
         display: flex;
         align-items: center;
@@ -67,18 +74,14 @@
     
     &__season{
         display: flex;
-        margin: 30px 0;
-
-        
-
-        
-        
+        margin: 2% 0;
+        width: 30%;
     }
 
     &__select{
-            margin: 0 30px;
             display: flex;
             align-items: center;
+            margin: 0 13%;
             width: 200px;
             position: relative;
         }
@@ -169,6 +172,14 @@
                 border: rgb(76, 156, 76) 1px solid;
             }
         }
+    }
+    &__submit{
+        margin: 0 1%;
+        padding: 1%;
+        background-color:rgb(199, 199, 199);
+    }
+    &__submit:hover{
+        background-color:rgb(76, 156, 76);
     }
 }
 
